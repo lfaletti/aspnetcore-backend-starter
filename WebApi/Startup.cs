@@ -17,6 +17,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
+using WebApi.Interfaces;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -60,6 +62,8 @@ namespace WebApi
 
             services.AddScoped(typeof(IProductService), typeof(ProductService));
             services.AddScoped(typeof(IProductRepository<int>), typeof(ProductRepository));
+
+            services.AddScoped(typeof(IProductViewModelService), typeof(ProductViewModelService));
 
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
@@ -117,6 +121,14 @@ namespace WebApi
             }));
         }
 
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            // use in-memory database
+            ConfigureInMemoryDatabases(services);
+
+            // use real database
+            // ConfigureProductionServices(services);
+        }
         private void ConfigureInMemoryDatabases(IServiceCollection services)
         {
             // use in-memory database
@@ -136,11 +148,11 @@ namespace WebApi
             // Requires LocalDB which can be installed with SQL Server Express 2016
             // https://www.microsoft.com/en-us/download/details.aspx?id=54284
             services.AddDbContext<ApplicationDbContext>(c =>
-                c.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
+                c.UseSqlServer(Configuration.GetConnectionString("ApplicationDbConnection")));
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityDbConnection")));
 
             ConfigureServices(services);
         }

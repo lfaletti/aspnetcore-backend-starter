@@ -1,17 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.Threading.Tasks;
+using WebApi.Interfaces;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ProductsController : ControllerBase
     {
+        private IProductViewModelService _products;
+
+        public ProductsController(IProductViewModelService products)
+        {
+            _products = products;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok( await _products.GetProducts() );
         }
 
         // GET api/values/5

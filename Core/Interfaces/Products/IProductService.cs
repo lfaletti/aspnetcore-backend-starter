@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using Core.Entities.Products;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces.Products
 {
     public interface IProductService
     {
-        Task GetAllAsync();
-        Task GetByIdAsync(string id);
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task GetByIdAsync(int id);
     }
 }
