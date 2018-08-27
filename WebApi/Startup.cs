@@ -1,5 +1,8 @@
 ﻿using Core.Interfaces;
+using Core.Interfaces.Logging;
+using Core.Interfaces.Notifications;
 using Core.Interfaces.Products;
+using Core.Interfaces.Repositories;
 using Core.Services;
 using Infraestructure.Data;
 using Infraestructure.Data.Products;
@@ -7,6 +10,10 @@ using Infraestructure.Identity;
 using Infraestructure.Logging;
 using Infraestructure.Services;
 using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using WebApi.Interfaces;
 using WebApi.Services;
 
@@ -45,7 +53,7 @@ namespace WebApi
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            // TODO: review for oauth
+            // TODO: review for auth
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -58,12 +66,32 @@ namespace WebApi
                 };
             });
 
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
+
+            // Add authentication services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.Authority = domain;
+                options.Audience = Configuration["Auth0:ApiIdentifier"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
+            });
+
+            // register the scope authorization handler
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+
             services.AddScoped(typeof(IAsyncRepository<>), typeof(Repository<>));
 
             services.AddScoped(typeof(IProductService), typeof(ProductService));
             services.AddScoped(typeof(IProductRepository<int>), typeof(ProductRepository));
 
-            services.AddScoped(typeof(IProductViewModelService), typeof(ProductViewModelService));
+            services.AddScoped(typeof(IProductsViewService), typeof(ProductViewModelService));
 
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 

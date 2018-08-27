@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Core.Entities.Products;
+﻿using Core.Entities.Products;
 using Core.Interfaces.Products;
+using Core.Interfaces.Repositories;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Core.Services
 {
+    /// <summary>
+    /// Domain Service class for Products.
+    /// </summary>
     public class ProductService : IProductService
     {
         private IProductRepository<int> _productRepository;

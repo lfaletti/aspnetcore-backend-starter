@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Core.Interfaces
+namespace Core.Interfaces.Notifications
 {
     public interface IEmailSender
     {

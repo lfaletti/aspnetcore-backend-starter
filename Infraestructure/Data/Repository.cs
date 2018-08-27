@@ -4,6 +4,7 @@ using Core.Entities;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Core.Interfaces.Repositories;
 
 namespace Infraestructure.Data
 {

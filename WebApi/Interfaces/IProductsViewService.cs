@@ -4,7 +4,7 @@ using WebApi.ViewModels;
 
 namespace WebApi.Interfaces
 {
-    public interface IProductViewModelService
+    public interface IProductsViewService
     {
         Task<List<ProductViewModel>> GetProducts();
     }

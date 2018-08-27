@@ -1,6 +1,5 @@
 ﻿using Core.Entities.Products;
-using Core.Interfaces;
-using Core.Interfaces.Products;
+using Core.Interfaces.Repositories;
 
 namespace Infraestructure.Data.Products
 {

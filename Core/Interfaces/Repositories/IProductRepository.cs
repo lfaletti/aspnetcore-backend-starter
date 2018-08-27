@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Products;
+using Core.Interfaces.Repositories;
 
-namespace Core.Interfaces.Products
+namespace Core.Interfaces.Repositories
 {
     public interface IProductRepository<TKey> : IAsyncRepository<Product>
     {

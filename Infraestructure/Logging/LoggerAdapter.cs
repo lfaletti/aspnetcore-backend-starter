@@ -1,4 +1,4 @@
-﻿using Core.Interfaces;
+﻿using Core.Interfaces.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace Infraestructure.Logging

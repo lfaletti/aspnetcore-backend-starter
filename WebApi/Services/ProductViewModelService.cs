@@ -10,7 +10,7 @@ namespace WebApi.Services
     /// <summary>
     /// View model class to render view data returned by domain services.
     /// </summary>
-    public class ProductViewModelService : IProductViewModelService
+    public class ProductViewModelService : IProductsViewService
     {
         private IProductService _productService; 
 

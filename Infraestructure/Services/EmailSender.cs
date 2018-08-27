@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces;
+using Core.Interfaces.Notifications;
 using System.Threading.Tasks;
 
 namespace Infraestructure.Services
